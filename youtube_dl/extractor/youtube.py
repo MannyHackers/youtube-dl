@@ -1384,7 +1384,7 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
         funcname = self._search_regex(
             (r'\b[cs]\s*&&\s*[adf]\.set\([^,]+\s*,\s*encodeURIComponent\s*\(\s*(?P<sig>[a-zA-Z0-9$]+)\(',
              r'\b[a-zA-Z0-9]+\s*&&\s*[a-zA-Z0-9]+\.set\([^,]+\s*,\s*encodeURIComponent\s*\(\s*(?P<sig>[a-zA-Z0-9$]+)\(',
-             r'\b(?P<sig>[a-zA-Z0-9$]{2})\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*""\s*\)',
+             r'(?:\b|[^a-zA-Z0-9$])(?P<sig>[a-zA-Z0-9$]{2})\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*""\s*\)',
              r'(?P<sig>[a-zA-Z0-9$]+)\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*""\s*\)',
              # Obsolete patterns
              r'(["\'])signature\1\s*,\s*(?P<sig>[a-zA-Z0-9$]+)\(',
@@ -1930,7 +1930,7 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
             ''', replace_url, video_description)
             video_description = clean_html(video_description)
         else:
-            video_description = self._html_search_meta('description', video_webpage) or video_details.get('shortDescription')
+            video_description = video_details.get('shortDescription') or self._html_search_meta('description', video_webpage)
 
         if not smuggled_data.get('force_singlefeed', False):
             if not self._downloader.params.get('noplaylist'):
